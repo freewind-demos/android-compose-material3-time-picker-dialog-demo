@@ -1,0 +1,72 @@
+    @file:OptIn(ExperimentalMaterial3Api::class)
+
+    package com.freewind.material3.timepickerdialogdemo
+
+    import android.os.Bundle
+    import androidx.activity.ComponentActivity
+    import androidx.activity.compose.setContent
+    import androidx.compose.foundation.background
+    import androidx.compose.foundation.layout.*
+    import androidx.compose.foundation.lazy.LazyColumn
+    import androidx.compose.foundation.lazy.items
+    import androidx.compose.foundation.text.input.rememberTextFieldState
+    import androidx.compose.material.icons.Icons
+    import androidx.compose.material.icons.filled.*
+    import androidx.compose.material3.*
+    import androidx.compose.material3.carousel.rememberCarouselState
+    import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+    import androidx.compose.runtime.*
+    import androidx.compose.ui.Alignment
+    import androidx.compose.ui.Modifier
+    import androidx.compose.ui.graphics.Color
+    import androidx.compose.ui.state.ToggleableState
+    import androidx.compose.ui.unit.dp
+
+    class MainActivity : ComponentActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContent {
+                MaterialTheme {
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        DemoScreen()
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun DemoScreen() {
+            Scaffold(
+                topBar = {
+                    CenterAlignedTopAppBar(
+                        title = { Text("TimePickerDialog") },
+                    )
+                },
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    var open by remember { mutableStateOf(true) }
+                    val state = rememberTimePickerState(initialHour = 10, initialMinute = 30)
+                    Button(onClick = { open = true }) { Text("Show") }
+                    if (open) {
+                        TimePickerDialog(
+                            onDismissRequest = { open = false },
+                            confirmButton = {
+                                TextButton(onClick = { open = false }) { Text("OK") }
+                            },
+                            title = { Text("Pick time") },
+                        ) {
+                            TimePicker(state = state)
+                        }
+                    }
+
+                }
+            }
+
+    }
